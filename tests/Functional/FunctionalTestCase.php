@@ -46,4 +46,9 @@ abstract class FunctionalTestCase extends WebTestCase
 
         $this->client->loginUser($user);
     }
+
+    protected function submit(string $button, array $formData = [], string $method = 'POST'): Crawler
+    {
+        return $this->client->submitForm($button, $formData, $method);
+    }
 }

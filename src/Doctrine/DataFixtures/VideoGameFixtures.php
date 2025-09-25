@@ -2,6 +2,8 @@
 
 namespace App\Doctrine\DataFixtures;
 
+use App\Model\Entity\Review;
+use App\Model\Entity\Tag;
 use App\Model\Entity\User;
 use App\Model\Entity\VideoGame;
 use App\Rating\CalculateAverageRating;
@@ -27,24 +29,55 @@ final class VideoGameFixtures extends Fixture implements DependentFixtureInterfa
     {
         $users = $manager->getRepository(User::class)->findAll();
 
-        $videoGames = array_fill_callback(0, 50, fn (int $index): VideoGame => (new VideoGame)
-            ->setTitle(sprintf('Jeu vidéo %d', $index))
-            ->setDescription($this->faker->paragraphs(10, true))
-            ->setReleaseDate(new DateTimeImmutable())
-            ->setTest($this->faker->paragraphs(6, true))
-            ->setRating(($index % 5) + 1)
-            ->setImageName(sprintf('video_game_%d.png', $index))
-            ->setImageSize(2_098_872)
-        );
-
-        // TODO : Ajouter les tags aux vidéos
-
-        array_walk($videoGames, [$manager, 'persist']);
-
+        $tagNames = ['rpg', 'multijoueur', 'fps', 'tps', 'gestion', 'action'];
+        $tags = array_map(fn(string $name) => (new Tag())->setName($name), $tagNames);
+        array_walk($tags, [$manager, 'persist']);
         $manager->flush();
 
-        // TODO : Ajouter des reviews aux vidéos
+        $videoGames = [];
+        for ($i = 0; $i < 50; $i++) {
+            $videoGames[] = (new VideoGame())
+                ->setTitle(sprintf('Jeu vidéo %d', $i))
+                ->setDescription($this->faker->paragraphs(10, true))
+                ->setReleaseDate(new DateTimeImmutable())
+                ->setTest($this->faker->paragraphs(6, true))
+                ->setRating(($i % 5) + 1)
+                ->setImageName(sprintf('video_game_%d.png', $i))
+                ->setImageSize(2_098_872);
+        }
 
+        // Associer aléatoirement des tags aux jeux vidéo
+        foreach ($videoGames as $game) {
+            shuffle($tags);
+            foreach (array_slice($tags, 0, 2) as $tag) {
+                $game->getTags()->add($tag);
+            }
+        }
+
+        foreach ($videoGames as $videoGame) {
+            $manager->persist($videoGame);
+        }
+
+            $manager->flush();
+
+        // Ajouter des reviews aux jeux vidéo
+        foreach ($videoGames as $game) {
+            foreach ($users as $user) {
+                $review = (new Review())
+                    ->setUser($user)
+                    ->setVideoGame($game)
+                    ->setRating(rand(1, 5))
+                    ->setComment($this->faker->sentence());
+
+                $game->getReviews()->add($review);
+                $manager->persist($review);
+
+                $this->calculateAverageRating->calculateAverage($game);
+                $this->countRatingsPerValue->countRatingsPerValue($game);
+            }
+        }
+
+        $manager->flush();
     }
 
     public function getDependencies(): array

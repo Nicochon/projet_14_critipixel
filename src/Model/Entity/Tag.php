@@ -20,6 +20,7 @@ class Tag
     #[Id]
     #[GeneratedValue]
     #[Column]
+    /** @phpstan-ignore-next-line */
     private ?int $id = null;
 
     #[Column(unique: true)]
@@ -49,6 +50,12 @@ class Tag
     public function setName(string $name): Tag
     {
         $this->name = $name;
+        return $this;
+    }
+
+    public function setCode(?string $code): self
+    {
+        $this->code = $code;
         return $this;
     }
 }

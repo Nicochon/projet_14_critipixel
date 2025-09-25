@@ -40,9 +40,14 @@ final class VideoGameController extends AbstractController
         $form = $this->createForm(ReviewType::class, $review)->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $user = $this->getUser();
+            if (!$user instanceof \App\Model\Entity\User) {
+                throw new \LogicException('L’utilisateur connecté n’est pas du type attendu.');
+            }
+
             $this->denyAccessUnlessGranted('review', $videoGame);
             $review->setVideoGame($videoGame);
-            $review->setUser($this->getUser());
+            $review->setUser($user);
             $entityManager->persist($review);
             $entityManager->flush();
             return $this->redirectToRoute('video_games_show', ['slug' => $videoGame->getSlug()]);
