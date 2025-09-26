@@ -1,0 +1,61 @@
+name: CI Symfony
+
+# Déclenche la CI sur push ou PR sur toutes les branches
+on:
+  push:
+    branches:
+      - '**'
+  pull_request:
+    branches:
+      - '**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    services:
+      db:
+        image: mariadb:10
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: symfony
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping --silent"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
+    env:
+      DATABASE_URL: "mysql://root:root@127.0.0.1:3306/symfony"
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.2
+          extensions: mbstring, intl, pdo_mysql
+          coverage: none
+
+      - name: Install Composer dependencies
+        run: composer install --no-interaction --prefer-dist
+
+      - name: Wait for DB
+        run: |
+          for i in {1..30}; do
+            php -r "new PDO('mysql:host=127.0.0.1;dbname=symfony', 'root', 'root');" && break
+            echo "Waiting for DB..."
+            sleep 2
+          done
+
+      - name: Run database migrations
+        run: |
+          php bin/console doctrine:database:create --if-not-exists
+          php bin/console doctrine:migrations:migrate --no-interaction
+
+      - name: Run PHPUnit tests
+        run: vendor/bin/phpunit
