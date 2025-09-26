@@ -27,8 +27,7 @@ jobs:
           --health-retries=3
 
     env:
-      DATABASE_URL: "mysql://root:root@127.0.0.1:3306/symfony"
-      DATABASE_TEST_URL: "mysql://root:root@127.0.0.1:3306/symfony_test"
+      DATABASE_URL: "mysql://root:root@127.0.0.1:3306/symfony_test"
 
     steps:
       - name: Checkout code
@@ -52,6 +51,9 @@ jobs:
         run: |
           php bin/console doctrine:database:create --env=test --if-not-exists
           php bin/console doctrine:schema:create --env=test
+
+      - name: Load fixtures
+        run: php bin/console doctrine:fixtures:load --env=test --no-interaction
 
       # ✅ Et ici on lance PHPUnit en utilisant ton phpunit.xml.dist
       - name: Run PHPUnit tests
