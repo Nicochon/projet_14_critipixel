@@ -76,7 +76,7 @@ final class ShowTest extends FunctionalTestCase
         // 3. Charger la page du jeu
         $crawler = $this->client->request('GET', '/jeu-video-49');
         self::assertResponseIsSuccessful();
-        file_put_contents('/var/www/html/showtest.html', $this->client->getResponse()->getContent());
+//        file_put_contents('/var/www/html/showtest.html', $this->client->getResponse()->getContent());
 
         // 4. Récupérer et remplir le formulaire
         $form = $crawler->filter('form[name="review"]')->form();
