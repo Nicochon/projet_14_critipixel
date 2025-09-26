@@ -28,6 +28,7 @@ jobs:
 
     env:
       DATABASE_URL: "mysql://root:root@127.0.0.1:3306/symfony"
+      DATABASE_TEST_URL: "mysql://root:root@127.0.0.1:3306/symfony_test"
 
     steps:
       - name: Checkout code
@@ -46,6 +47,11 @@ jobs:
       # ✅ Ici on vérifie que les fichiers de tests sont bien présents
       - name: Lister les tests
         run: ls -R tests
+
+      - name: Create test database
+        run: |
+          php bin/console doctrine:database:create --env=test --if-not-exists
+          php bin/console doctrine:schema:create --env=test
 
       # ✅ Et ici on lance PHPUnit en utilisant ton phpunit.xml.dist
       - name: Run PHPUnit tests

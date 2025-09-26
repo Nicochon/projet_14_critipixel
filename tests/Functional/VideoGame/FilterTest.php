@@ -49,8 +49,6 @@ final class FilterTest extends FunctionalTestCase
     public function testFilterBySingleTag(): void
     {
         $crawler = $this->client->request('GET', '/'); // ou l’URL de ta page
-        $html = $this->client->getResponse()->getContent();
-        file_put_contents('/var/www/html/debug.html', $html);
         $form = $crawler->filter('form[name="filter"]')->form();
 
         // Correction : Utilisez la méthode setValues() sur l'objet form
@@ -81,7 +79,6 @@ final class FilterTest extends FunctionalTestCase
 
         // 2. Récupérer tous les jeux affichés
         $nodes = $crawler->filter('article.game-card');
-        file_put_contents('/var/www/html/node.html', $nodes->outerHtml()); // debug HTML complet
         self::assertGreaterThan(0, $nodes->count(), 'Il doit y avoir au moins un jeu affiché');
 
         // 3. Vérifier que chaque jeu contient au moins un des tags attendus
