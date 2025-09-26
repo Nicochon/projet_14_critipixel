@@ -50,12 +50,14 @@ class Tag
     public function setName(string $name): Tag
     {
         $this->name = $name;
+
         return $this;
     }
 
     public function setCode(?string $code): self
     {
         $this->code = $code;
+
         return $this;
     }
 }

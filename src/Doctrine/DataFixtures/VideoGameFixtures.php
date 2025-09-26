@@ -8,20 +8,17 @@ use App\Model\Entity\User;
 use App\Model\Entity\VideoGame;
 use App\Rating\CalculateAverageRating;
 use App\Rating\CountRatingsPerValue;
-use DateTimeImmutable;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Generator;
-
-use function array_fill_callback;
 
 final class VideoGameFixtures extends Fixture implements DependentFixtureInterface
 {
     public function __construct(
         private readonly Generator $faker,
         private readonly CalculateAverageRating $calculateAverageRating,
-        private readonly CountRatingsPerValue $countRatingsPerValue
+        private readonly CountRatingsPerValue $countRatingsPerValue,
     ) {
     }
 
@@ -30,16 +27,16 @@ final class VideoGameFixtures extends Fixture implements DependentFixtureInterfa
         $users = $manager->getRepository(User::class)->findAll();
 
         $tagNames = ['rpg', 'multijoueur', 'fps', 'tps', 'gestion', 'action'];
-        $tags = array_map(fn(string $name) => (new Tag())->setName($name), $tagNames);
+        $tags = array_map(fn (string $name) => (new Tag())->setName($name), $tagNames);
         array_walk($tags, [$manager, 'persist']);
         $manager->flush();
 
         $videoGames = [];
-        for ($i = 0; $i < 50; $i++) {
+        for ($i = 0; $i < 50; ++$i) {
             $videoGames[] = (new VideoGame())
                 ->setTitle(sprintf('Jeu vidéo %d', $i))
                 ->setDescription($this->faker->paragraphs(10, true))
-                ->setReleaseDate(new DateTimeImmutable())
+                ->setReleaseDate(new \DateTimeImmutable())
                 ->setTest($this->faker->paragraphs(6, true))
                 ->setRating(($i % 5) + 1)
                 ->setImageName(sprintf('video_game_%d.png', $i))
@@ -58,7 +55,7 @@ final class VideoGameFixtures extends Fixture implements DependentFixtureInterfa
             $manager->persist($videoGame);
         }
 
-            $manager->flush();
+        $manager->flush();
 
         // Ajouter des reviews aux jeux vidéo
         foreach ($videoGames as $game) {

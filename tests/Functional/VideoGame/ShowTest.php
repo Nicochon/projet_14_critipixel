@@ -21,28 +21,28 @@ final class ShowTest extends FunctionalTestCase
         self::assertSelectorTextContains('h1', 'Jeu vidéo 0'); // assertion #2
     }
 
-//    public function testShouldNotPostReviewWithoutRating(): void
-//    {
-//        $this->login();
-//
-//        $crawler = $this->client->request('GET', '/jeu-video-49');
-//        self::assertResponseIsSuccessful();
-//
-//        // On soumet le formulaire avec un commentaire mais sans rating
-//        $form = $crawler->selectButton('Poster')->form([
-//            'review[comment]' => 'Mon commentaire',
-//        ]);
-//
-//        $this->client->submit($form);
-//        self::assertResponseStatusCodeSame(Response::HTTP_OK);
-//        // Vérifie que le formulaire est toujours affiché (car la soumission a échoué)
-//        self::assertSelectorExists('form[name="review"]');
-//
-//        // Vérifie la présence du message d'erreur sur le rating
-//        self::assertSelectorTextContains('.form-error-message', 'Cette valeur ne doit pas être vide');
-//    }
+    //    public function testShouldNotPostReviewWithoutRating(): void
+    //    {
+    //        $this->login();
+    //
+    //        $crawler = $this->client->request('GET', '/jeu-video-49');
+    //        self::assertResponseIsSuccessful();
+    //
+    //        // On soumet le formulaire avec un commentaire mais sans rating
+    //        $form = $crawler->selectButton('Poster')->form([
+    //            'review[comment]' => 'Mon commentaire',
+    //        ]);
+    //
+    //        $this->client->submit($form);
+    //        self::assertResponseStatusCodeSame(Response::HTTP_OK);
+    //        // Vérifie que le formulaire est toujours affiché (car la soumission a échoué)
+    //        self::assertSelectorExists('form[name="review"]');
+    //
+    //        // Vérifie la présence du message d'erreur sur le rating
+    //        self::assertSelectorTextContains('.form-error-message', 'Cette valeur ne doit pas être vide');
+    //    }
 
-    //vérifier le cas d'un utilisateur qui post un avis
+    // vérifier le cas d'un utilisateur qui post un avis
     public function testShouldPostReview(): void
     {
         $entityManager = self::getContainer()->get('doctrine')->getManager();
@@ -100,7 +100,7 @@ final class ShowTest extends FunctionalTestCase
         // 8. Vérifier en base
         $review = self::getContainer()
             ->get('doctrine')
-            ->getRepository(\App\Model\Entity\Review::class)
+            ->getRepository(Review::class)
             ->findOneBy(['comment' => 'Mon commentaire', 'rating' => 4]);
         self::assertNotNull($review);
 

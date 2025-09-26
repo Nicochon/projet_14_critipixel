@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Tests\Unit;
 
-use PHPUnit\Framework\TestCase;
-use App\Model\Entity\VideoGame;
 use App\Model\Entity\Review;
 use App\Model\Entity\User;
+use App\Model\Entity\VideoGame;
+use PHPUnit\Framework\TestCase;
 
 class VideoGameRatingCountTest extends TestCase
 {
@@ -42,7 +42,7 @@ class VideoGameRatingCountTest extends TestCase
 
         // Compter combien de fois chaque note apparaît
         foreach ($game->getReviews() as $review) {
-            $ratingsCount[$review->getRating()]++;
+            ++$ratingsCount[$review->getRating()];
         }
 
         // Vérifications

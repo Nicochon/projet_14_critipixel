@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Tests\Unit;
 
-use PHPUnit\Framework\TestCase;
-use App\Model\Entity\VideoGame;
 use App\Model\Entity\Review;
 use App\Model\Entity\User;
+use App\Model\Entity\VideoGame;
+use PHPUnit\Framework\TestCase;
 
 class VideoGameTest extends TestCase
 {
@@ -26,7 +26,7 @@ class VideoGameTest extends TestCase
 
         // Créer des reviews avec différentes notes
         $reviewsData = [
-            5, 4, 5, 3, 1
+            5, 4, 5, 3, 1,
         ];
 
         $users = [$user1, $user2, $user3, $user4, $user5];

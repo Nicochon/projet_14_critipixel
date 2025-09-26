@@ -1,15 +1,16 @@
 <?php
+
 //
-//declare(strict_types=1);
+// declare(strict_types=1);
 //
-//namespace App\Tests\Functional\Auth;
+// namespace App\Tests\Functional\Auth;
 //
-//use App\Model\Entity\User;
-//use App\Tests\Functional\FunctionalTestCase;
-//use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+// use App\Model\Entity\User;
+// use App\Tests\Functional\FunctionalTestCase;
+// use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 //
-//final class RegisterTest extends FunctionalTestCase
-//{
+// final class RegisterTest extends FunctionalTestCase
+// {
 //    public function testThatRegistrationShouldSucceeded(): void
 //    {
 //        $this->get('/auth/register');
@@ -58,4 +59,4 @@
 //            'register[plainPassword]' => 'SuperPassword123!'
 //        ] + $overrideData;
 //    }
-//}
+// }

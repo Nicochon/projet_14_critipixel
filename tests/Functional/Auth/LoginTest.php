@@ -1,14 +1,15 @@
 <?php
+
 //
-//declare(strict_types=1);
+// declare(strict_types=1);
 //
-//namespace App\Tests\Functional\Auth;
+// namespace App\Tests\Functional\Auth;
 //
-//use App\Tests\Functional\FunctionalTestCase;
-//use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+// use App\Tests\Functional\FunctionalTestCase;
+// use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 //
-//final class LoginTest extends FunctionalTestCase
-//{
+// final class LoginTest extends FunctionalTestCase
+// {
 //    public function testThatLoginShouldSucceeded(): void
 //    {
 //        $this->get('/auth/login');
@@ -40,4 +41,4 @@
 //
 //        self::assertFalse($authorizationChecker->isGranted('IS_AUTHENTICATED'));
 //    }
-//}
+// }

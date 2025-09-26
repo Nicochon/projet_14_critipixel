@@ -20,30 +20,30 @@ final class FilterTest extends FunctionalTestCase
         parent::setUp();
 
         $this->manager = $this->client->getContainer()->get('doctrine')->getManager();
-//
-//        // 1. Créer et persister l'entité Tag
-//        $this->testTag = (new Tag())
-//            ->setName('toto');
-//        $this->manager->persist($this->testTag);
-//
-//        // Un premier flush() est nécessaire pour que l'ID et le code du Tag soient générés
-//        $this->manager->flush();
-//
-//        // 2. Créer l'entité VideoGame
-//        $this->testGame = (new VideoGame())
-//            ->setTitle('Test Game with toto')
-//            ->setDescription('Test Game with toto')
-//            ->setRating(4)
-//            ->setReleaseDate(new \DateTimeImmutable());
-//
-//        // 3. Associer le Tag avec le VideoGame
-//        $this->testGame->addTag($this->testTag);
-//
-//        // 4. Persister l'entité VideoGame
-//        $this->manager->persist($this->testGame);
-//
-//        // Un second flush() pour persister l'entité VideoGame et la relation dans la table de jointure
-//        $this->manager->flush();
+        //
+        //        // 1. Créer et persister l'entité Tag
+        //        $this->testTag = (new Tag())
+        //            ->setName('toto');
+        //        $this->manager->persist($this->testTag);
+        //
+        //        // Un premier flush() est nécessaire pour que l'ID et le code du Tag soient générés
+        //        $this->manager->flush();
+        //
+        //        // 2. Créer l'entité VideoGame
+        //        $this->testGame = (new VideoGame())
+        //            ->setTitle('Test Game with toto')
+        //            ->setDescription('Test Game with toto')
+        //            ->setRating(4)
+        //            ->setReleaseDate(new \DateTimeImmutable());
+        //
+        //        // 3. Associer le Tag avec le VideoGame
+        //        $this->testGame->addTag($this->testTag);
+        //
+        //        // 4. Persister l'entité VideoGame
+        //        $this->manager->persist($this->testGame);
+        //
+        //        // Un second flush() pour persister l'entité VideoGame et la relation dans la table de jointure
+        //        $this->manager->flush();
     }
 
     public function testFilterBySingleTag(): void
@@ -82,7 +82,7 @@ final class FilterTest extends FunctionalTestCase
         // 2. Récupérer tous les jeux affichés
         $nodes = $crawler->filter('article.game-card');
         file_put_contents('/var/www/html/node.html', $nodes->outerHtml()); // debug HTML complet
-        self::assertGreaterThan(0,  $nodes->count(), 'Il doit y avoir au moins un jeu affiché');
+        self::assertGreaterThan(0, $nodes->count(), 'Il doit y avoir au moins un jeu affiché');
 
         // 3. Vérifier que chaque jeu contient au moins un des tags attendus
         $expectedTagNames = ['rpg', 'action'];
@@ -90,7 +90,7 @@ final class FilterTest extends FunctionalTestCase
         foreach ($nodes as $node) {
             $tags = [];
             foreach ($node->getElementsByTagName('span') as $span) {
-                if ($span->getAttribute('class') === 'tag') {
+                if ('tag' === $span->getAttribute('class')) {
                     $tags[] = strtolower($span->textContent);
                 }
             }
@@ -109,10 +109,9 @@ final class FilterTest extends FunctionalTestCase
         }
     }
 
-//
     public function testFilterByNonExistentTag(): void
     {
-//        https://www.critipixel.fr/?page=1&limit=10&sorting=ReleaseDate&direction=Descending&filter[search]=&filter[tags][]=999
+        //        https://www.critipixel.fr/?page=1&limit=10&sorting=ReleaseDate&direction=Descending&filter[search]=&filter[tags][]=999
         $crawler = $this->client->request('GET', '/?filter[tags][]=999');
 
         self::assertResponseIsSuccessful();
