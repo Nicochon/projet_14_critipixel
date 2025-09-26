@@ -1,6 +1,5 @@
 name: CI Symfony
 
-# Déclenche la CI sur push ou PR sur toutes les branches
 on:
   push:
     branches:
@@ -44,18 +43,10 @@ jobs:
       - name: Install Composer dependencies
         run: composer install --no-interaction --prefer-dist
 
-      - name: Wait for DB
-        run: |
-          for i in {1..30}; do
-            php -r "new PDO('mysql:host=127.0.0.1;dbname=symfony', 'root', 'root');" && break
-            echo "Waiting for DB..."
-            sleep 2
-          done
+      # ✅ Ici on vérifie que les fichiers de tests sont bien présents
+      - name: Lister les tests
+        run: ls -R tests
 
-      - name: Run database migrations
-        run: |
-          php bin/console doctrine:database:create --if-not-exists
-          php bin/console doctrine:migrations:migrate --no-interaction
-
+      # ✅ Et ici on lance PHPUnit en utilisant ton phpunit.xml.dist
       - name: Run PHPUnit tests
-        run: vendor/bin/phpunit
+        run: vendor/bin/phpunit -c phpunit.xml.dist --verbose
