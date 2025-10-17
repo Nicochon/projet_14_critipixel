@@ -58,3 +58,6 @@ jobs:
       # ✅ Et ici on lance PHPUnit en utilisant ton phpunit.xml.dist
       - name: Run PHPUnit tests
         run: vendor/bin/phpunit -c phpunit.xml.dist --verbose
+
+      - name: Run PHPStan
+        run: vendor/bin/phpstan analyse --memory-limit=1G
