@@ -55,6 +55,12 @@ jobs:
       - name: Load fixtures
         run: php bin/console doctrine:fixtures:load --env=test --no-interaction
 
+      - name: Debug jeux et tags
+        run: |
+          php bin/console doctrine:query:sql "SELECT title FROM video_game;" --env=test
+          php bin/console doctrine:query:sql "SELECT name FROM tag;" --env=test
+
+
       # ✅ Et ici on lance PHPUnit en utilisant ton phpunit.xml.dist
       - name: Run PHPUnit tests
         run: vendor/bin/phpunit -c phpunit.xml.dist --verbose
